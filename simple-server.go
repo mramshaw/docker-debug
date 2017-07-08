@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	fmt.Println("Now listening on http://localhost:8080 ...")
 	fasthttp.ListenAndServe(":8080", fastHandler)
 }
 
