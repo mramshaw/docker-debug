@@ -1,13 +1,28 @@
-IMG := markeijsermans/debug:latest
+IMG     := mramshaw4docs/docker-debug
+VERSION := 1.0.0
+GOPATH  := "`pwd`/go"
+GOOS    := linux
+GOARCH  := amd64
 
-all: deps build
+all:	deps build
+
+env:
+	echo $(GOPATH)
 
 deps:
-	go get .
+	mkdir -p $(GOPATH)
+	GOPATH=$(GOPATH) go get -d -v .
 
 build:
-	GOOS=linux GOARCH=amd64 go build -v -o simple-server .
+	GOPATH=$(GOPATH) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -v -o simple-server .
+
+package:
 	docker build -t $(IMG) .
+	docker tag $(IMG) $(IMG):$(VERSION)
 
 push:
 	docker push $(IMG)
+
+clean:
+	rm -rf $(GOPATH)
+	rm simple-server
